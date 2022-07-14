@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { AiFillEye } from "react-icons/ai"
-
 import "./Books.scss"
+import useBooks from "../../graphql/hooks/useBooks"
 
+// fake data
 const _books = [
   {
     title: "Grapql course",
@@ -42,10 +43,14 @@ const Books = () => {
   //some animation
   const [animateCard, setAnimateCard] = useState({ y: 0, opacity: 1 })
 
+  const { data, error, loading } = useBooks()
+
   useEffect(() => {
-    setBooks(_books)
-    setFilteredBooks(_books)
-  }, [])
+    if (data) {
+      setBooks(data.books)
+      setFilteredBooks(data.books)
+    }
+  }, [data])
 
   const handleBookFilter = (filter) => {
     setActiveFilter(filter)
@@ -64,6 +69,13 @@ const Books = () => {
       setFilteredBooks(filters)
     }
   }
+
+  const renderBooks = () =>
+    Object.keys(filteredBooks).length > 0 ? (
+      filteredBooks.map((book, index) => <BookCard book={book} key={index} />)
+    ) : (
+      <div>Nothing here for now!</div>
+    )
 
   return (
     <div id='books' className='app__flex'>
@@ -93,12 +105,12 @@ const Books = () => {
           transition={{ duration: 0.5, delayChildren: 0.5 }}
           className='app__book-list'
         >
-          {Object.keys(filteredBooks).length > 0 ? (
-            filteredBooks.map((book, index) => (
-              <BookCard book={book} key={index} />
-            ))
+          {loading ? (
+            <div className='app_container'>Loading...</div>
+          ) : error ? (
+            <div>Something went wrong!</div>
           ) : (
-            <div>Nothing here for now!</div>
+            renderBooks()
           )}
         </motion.div>
       </div>
@@ -137,7 +149,7 @@ const BookCard = ({ book }) => {
 
         <div className='app__book-content app__flex'>
           <h1 className='bold-text'>{title}</h1>
-          <p className='p-text' style={{ marginTop: 10 }}>
+          <p className='p-text' style={{ marginTop: 10, textAlign: "center" }}>
             {desc}
           </p>
 
