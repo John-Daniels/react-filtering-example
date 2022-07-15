@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Graphql + Reactjs filtering example (<https://react-filtering-example.vercel.app/>)
+
+## Overview
+
+In this project,i used `@apollo/client` to generate a connection from our frontend to our backend apollo server.
+
+As said in the description, This project is based solely on Filtering and sorting data while fetch that data from a graphql server.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
